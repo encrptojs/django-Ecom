@@ -1,12 +1,16 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from .models import Product
 
 # Create your views here.
 def index(req):
     return render(req,'shop/index.html')
 
 def about(req):
-    return HttpResponse("Welcome to About")
+    prod = Product.objects.get(product_name="AUTO")
+    print("testing")
+    print(prod.category)
+    return render(req,"shop/about.html")     #retrieving from templates
 
 def contact(req):
     return HttpResponse("Welcome to contact")
