@@ -5,12 +5,21 @@ from math import ceil
 
 # Create your views here.
 def index(req):
-    products = Product.objects.all()
-    print(products)
-    n = len(products)
-    # print(products.0.image)
-    nSlides = n//4 + ceil((n/4)-(n//4))
-    params = {'no_of_slides':nSlides, 'range': range(1,nSlides),'product': products}
+
+    allProds = []
+    listCatIds = Product.objects.values('category','id')
+    print(listCatIds)
+    uniqueCats = {item['category'] for item in listCatIds}#storing only values for category
+    print(uniqueCats)
+
+    for item in uniqueCats:
+        prod= Product.objects.filter(category=item) # unique list of item
+        n = len(prod)
+        nSlides = n//4 + ceil((n/4) - (n//4))
+        allProds.append([prod, range(1,nSlides), nSlides]) # Collection of Unique Lists of item
+        print("testing.........")
+        print(prod)
+    params = {'allProds':allProds}
     return render(req,'shop/index.html',params)
 
 def about(req):
